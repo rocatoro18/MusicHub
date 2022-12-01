@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <!--Customize your theme here-->
+        <item name="colorPrimary">#8d99ae</item>
+        <item name="colorPrimaryDark">#2b2d42</item>
+        <item name="colorAccent">#edf2f4</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+</resources>
