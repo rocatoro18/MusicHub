@@ -12,6 +12,7 @@
     <string name="create_an_account">Crear Cuenta</string>
     <string name="hint_last_name">Apellidos</string>
     <string name="hint_first_name">Nombre</string>
+    <string name="hint_phone">Celular</string>
     <string name="et_hint_confirm_password">Confirmar Contraseña</string>
     <string name="i_agree_to_the_terms_and_condition">Acepto Los <u>Términos y Condiciones</u></string>
     <string name="btn_lbl_register">Registrarse</string>
@@ -21,6 +22,7 @@
     <string name="err_msg_enter_first_name">Porfavor ingrese su nombre.</string>
     <string name="err_msg_enter_last_name">Porfavor ingrese sus apellidos.</string>
     <string name="err_msg_enter_email">Porfavor ingrese su email.</string>
+    <string name="err_msg_enter_phone">Porfavor ingrese su celular.</string>
     <string name="err_msg_enter_password">Porfavor ingrese su contraseña.</string>
     <string name="err_msg_enter_confirm_password">Porfavor confirme su contraseña.</string>
     <string name="err_msg_password_and_confirm_password_mismatch">Su contraseña no coincide.</string>
