@@ -1,6 +1,8 @@
 package com.rocatoro.musichub.activities
 
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,7 +14,9 @@ import android.view.WindowManager
 import android.widget.Toast
 import com.google.gson.Gson
 import com.rocatoro.musichub.R
+import com.rocatoro.musichub.activities.MusicHubStore.home.MusicHubHomeActivity
 import com.rocatoro.musichub.activities.client.home.ClientHomeActivity
+import com.rocatoro.musichub.activities.delivery.home.DeliveryHomeActivity
 import com.rocatoro.musichub.models.ResponseHttp
 import com.rocatoro.musichub.models.User
 import com.rocatoro.musichub.providers.UsersProvider
@@ -98,10 +102,37 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         val gson = Gson()
         val user = gson.fromJson(data,User::class.java)
         sharedPref.save("user",user)
+
+        if(user.roles?.size!! > 1){ // HAVE MORE THAN ONE ROL
+            goToSelectRol()
+        }
+        else { // ONLY HAVE ONE ROL
+            goToClientHome()
+        }
+
+    }
+
+    private fun goToSelectRol(){
+        val i = Intent(this@LoginActivity,SelectRolesActivity::class.java)
+        i.flags = FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(i)
     }
 
     private fun goToClientHome(){
         val i = Intent(this@LoginActivity,ClientHomeActivity::class.java)
+        i.flags = FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(i)
+    }
+
+    private fun goToMusicHubADMINHome(){
+        val i = Intent(this@LoginActivity,MusicHubHomeActivity::class.java)
+        i.flags = FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(i)
+    }
+
+    private fun goToDeliveryHome(){
+        val i = Intent(this@LoginActivity,DeliveryHomeActivity::class.java)
+        i.flags = FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK
         startActivity(i)
     }
 
@@ -112,7 +143,25 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         if(!sharedPref.getData("user").isNullOrBlank()){
             // IF USER EXIST IN SESSION
             val user = gson.fromJson(sharedPref.getData("user"),User::class.java)
-            goToClientHome()
+
+            if(!sharedPref.getData("rol").isNullOrBlank()){
+                // SI EL USUARIO SELECCIONO EL ROL
+                val rol = sharedPref.getData("rol")?.replace("\"","")
+
+                if(rol == "Cliente"){
+                    goToClientHome()
+                }
+                else if(rol == "Music Hub ADMIN"){
+                    goToMusicHubADMINHome()
+                }
+                else if(rol == "DELIVERY"){
+                    goToDeliveryHome()
+                }
+
+            }
+            else {
+                goToClientHome()
+            }
         }
 
     }
@@ -136,7 +185,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                             Toast.LENGTH_LONG).show()
                         hideProgressDialog()
                         saveUserInSession(response.body()?.data.toString())
-                        goToClientHome()
+                        //goToClientHome()
                     }else{
                         Toast.makeText(this@LoginActivity,"Los datos no son correctos",
                             Toast.LENGTH_LONG).show()
