@@ -5,13 +5,28 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.Toast
+import com.google.gson.Gson
 import com.rocatoro.musichub.R
+import com.rocatoro.musichub.activities.client.home.ClientHomeActivity
+import com.rocatoro.musichub.models.ResponseHttp
+import com.rocatoro.musichub.models.User
+import com.rocatoro.musichub.providers.UsersProvider
+import com.rocatoro.musichub.utils.SharedPref
 import kotlinx.android.synthetic.main.activity_login.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class LoginActivity : BaseActivity(), View.OnClickListener {
+
+    val TAG = "LoginActivity"
+    var usersProvider = UsersProvider()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -31,6 +46,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         btn_login.setOnClickListener(this)
         // Click event assigned to Register text
         tv_register.setOnClickListener(this)
+
+        getUserFromSession()
 
     }
 
@@ -76,6 +93,30 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+    private fun saveUserInSession(data: String){
+        val sharedPref = SharedPref(this)
+        val gson = Gson()
+        val user = gson.fromJson(data,User::class.java)
+        sharedPref.save("user",user)
+    }
+
+    private fun goToClientHome(){
+        val i = Intent(this@LoginActivity,ClientHomeActivity::class.java)
+        startActivity(i)
+    }
+
+    private fun getUserFromSession(){
+        val sharedPref = SharedPref(this)
+        val gson = Gson()
+
+        if(!sharedPref.getData("user").isNullOrBlank()){
+            // IF USER EXIST IN SESSION
+            val user = gson.fromJson(sharedPref.getData("user"),User::class.java)
+            goToClientHome()
+        }
+
+    }
+
     private fun loginInRegisteredUser(){
         if(validateLoginDetails()){
             // Show the progress dialog
@@ -84,6 +125,33 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
             val email = et_email.text.toString().trim{ it <= ' '}
             val password = et_password.text.toString().trim{ it <= ' '}
             // Log-In using Firebase Authentication
+            usersProvider.login(email,password)?.enqueue(object: Callback<ResponseHttp>{
+                override fun onResponse(
+                    call: Call<ResponseHttp>,
+                    response: Response<ResponseHttp>
+                ) {
+                    Log.d(TAG,"Response: ${response.body()}")
+                    if (response.body()?.isSuccess == true){
+                        Toast.makeText(this@LoginActivity,response.body()?.message,
+                            Toast.LENGTH_LONG).show()
+                        hideProgressDialog()
+                        saveUserInSession(response.body()?.data.toString())
+                        goToClientHome()
+                    }else{
+                        Toast.makeText(this@LoginActivity,"Los datos no son correctos",
+                            Toast.LENGTH_LONG).show()
+                        hideProgressDialog()
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseHttp>, t: Throwable) {
+                    Log.d(TAG,"Hubo un error ${t.message}")
+                    Toast.makeText(this@LoginActivity,"Hubo un error ${t.message}",
+                    Toast.LENGTH_LONG).show()
+                    hideProgressDialog()
+                }
+
+            })
 
         }
     }

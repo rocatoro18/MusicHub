@@ -1,5 +1,6 @@
 package com.rocatoro.musichub.activities
 
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,10 +9,13 @@ import android.util.Log
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
+import com.google.gson.Gson
 import com.rocatoro.musichub.R
+import com.rocatoro.musichub.activities.client.home.ClientHomeActivity
 import com.rocatoro.musichub.models.ResponseHttp
 import com.rocatoro.musichub.models.User
 import com.rocatoro.musichub.providers.UsersProvider
+import com.rocatoro.musichub.utils.SharedPref
 import kotlinx.android.synthetic.main.activity_register.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -61,6 +65,13 @@ class RegisterActivity : BaseActivity() {
         toolbar_register_activity.setNavigationOnClickListener { onBackPressed() }
     }
 
+    private fun saveUserInSession(data: String){
+        val sharedPref = SharedPref(this)
+        val gson = Gson()
+        val user = gson.fromJson(data,User::class.java)
+        sharedPref.save("user",user)
+    }
+
     // A function to validate the entries of new user.
     private fun validateRegisterDetails(): Boolean{
         return when {
@@ -100,6 +111,11 @@ class RegisterActivity : BaseActivity() {
         }
     }
 
+    private fun goToClientHome(){
+        val i = Intent(this@RegisterActivity, ClientHomeActivity::class.java)
+        startActivity(i)
+    }
+
     private fun registerUser(){
         // Check with validate function if the entries are valid or not
         if(validateRegisterDetails()){
@@ -122,12 +138,16 @@ class RegisterActivity : BaseActivity() {
                     call: Call<ResponseHttp>,
                     response: Response<ResponseHttp>
                 ) {
+
+                    if(response.body()?.isSuccess == true){
+                        saveUserInSession(response.body()?.data.toString())
+                        goToClientHome()
+                    }
                     Toast.makeText(this@RegisterActivity,response.body()?.message,Toast.LENGTH_LONG).show()
                     Log.d(TAG,"Response: ${response}")
                     Log.d(TAG,"Body: ${response.body()}")
                     hideProgressDialog()
                 }
-
                 override fun onFailure(call: Call<ResponseHttp>, t: Throwable) {
                     Log.d(TAG,"Se produjo un error ${t.message}")
                     Toast.makeText(this@RegisterActivity,"Se produjo un error ${t.message}",Toast.LENGTH_LONG).show()
