@@ -111,8 +111,9 @@ class RegisterActivity : BaseActivity() {
         }
     }
 
-    private fun goToClientHome(){
-        val i = Intent(this@RegisterActivity, ClientHomeActivity::class.java)
+    private fun goToSaveImageActivity(){
+        val i = Intent(this@RegisterActivity, SaveImageActivity::class.java)
+        i.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(i)
     }
 
@@ -141,7 +142,7 @@ class RegisterActivity : BaseActivity() {
 
                     if(response.body()?.isSuccess == true){
                         saveUserInSession(response.body()?.data.toString())
-                        goToClientHome()
+                        goToSaveImageActivity()
                     }
                     Toast.makeText(this@RegisterActivity,response.body()?.message,Toast.LENGTH_LONG).show()
                     Log.d(TAG,"Response: ${response}")
