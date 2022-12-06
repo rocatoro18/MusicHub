@@ -6,11 +6,31 @@
     android:layout_height="match_parent"
     tools:context=".activities.client.home.ClientHomeActivity">
 
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:menu="@menu/bottom_navigation_menu_client"
+            android:layout_gravity="bottom"
+            android:background="@color/colorPrimaryDark"
+            app:itemIconTint="@color/white"
+            app:itemTextColor="@color/white"/>
+
+
+    </FrameLayout>
+
+    <!--
     <com.rocatoro.musichub.utils.MSPButton
         android:id="@+id/btn_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Cerrar Sesión"
         android:layout_gravity="center"/>
-    
+    -->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
