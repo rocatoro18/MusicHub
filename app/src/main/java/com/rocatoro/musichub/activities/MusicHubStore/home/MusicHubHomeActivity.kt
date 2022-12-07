@@ -27,11 +27,12 @@ class MusicHubHomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_client_home)
+        setContentView(R.layout.activity_music_hub_home)
         sharedPref = SharedPref(this)
         getUserFromSession()
 
-        openFragment(ClientCategoriesFragment())
+
+        openFragment(MusicHubOrdersFragment())
 
         bottomNavigation = findViewById(R.id.bottom_navigation)
 
@@ -68,6 +69,7 @@ class MusicHubHomeActivity : AppCompatActivity() {
         logout()
         }
          */
+
 
     }
 

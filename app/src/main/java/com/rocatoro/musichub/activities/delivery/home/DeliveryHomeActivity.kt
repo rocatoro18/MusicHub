@@ -28,13 +28,15 @@ class DeliveryHomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_client_home)
+        setContentView(R.layout.activity_delivery_home)
         sharedPref = SharedPref(this)
         getUserFromSession()
 
-        openFragment(ClientCategoriesFragment())
+        openFragment(DeliveryOrdersFragment())
 
         bottomNavigation = findViewById(R.id.bottom_navigation)
+
+
 
         bottomNavigation?.setOnItemSelectedListener {
             when (it.itemId){

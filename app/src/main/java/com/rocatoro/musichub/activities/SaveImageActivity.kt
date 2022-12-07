@@ -34,7 +34,7 @@ class SaveImageActivity : AppCompatActivity() {
 
     private var imageFile: File? = null
 
-    var usersProvider = UsersProvider()
+    var usersProvider: UsersProvider? = null
 
     var user: User? = null
 
@@ -47,6 +47,8 @@ class SaveImageActivity : AppCompatActivity() {
         sharedPref = SharedPref(this)
 
         getUserFromSession()
+
+        usersProvider = UsersProvider(user?.sessionToken)
 
         circleImageUser = findViewById(R.id.circleimage_user)
         buttonNext = findViewById(R.id.btn_next)
@@ -77,11 +79,16 @@ class SaveImageActivity : AppCompatActivity() {
     private fun saveImage(){
 
         if(imageFile != null && user != null) {
-            usersProvider.update(imageFile!!,user!!)?.enqueue(object: Callback<ResponseHttp> {
+            usersProvider?.update(imageFile!!,user!!)?.enqueue(object: Callback<ResponseHttp> {
                 override fun onResponse(call: Call<ResponseHttp>, response: Response<ResponseHttp>) {
                     Log.d(TAG,"Response: $response")
                     Log.d(TAG,"Body: ${response.body()}")
-                    saveUserInSession(response.body()?.data.toString())
+
+                    if(response.body()?.isSuccess == true){
+                        saveUserInSession(response.body()?.data.toString())
+                    } else {
+                        Toast.makeText(this@SaveImageActivity,"${response.body()?.message}",Toast.LENGTH_LONG).show()
+                    }
                 }
 
                 override fun onFailure(call: Call<ResponseHttp>, t: Throwable) {
