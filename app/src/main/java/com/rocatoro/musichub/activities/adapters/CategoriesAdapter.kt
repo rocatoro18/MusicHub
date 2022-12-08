@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.rocatoro.musichub.R
 import com.rocatoro.musichub.activities.MusicHubStore.home.MusicHubHomeActivity
 import com.rocatoro.musichub.activities.client.home.ClientHomeActivity
+import com.rocatoro.musichub.activities.client.products.list.ClientProductsListActivity
 import com.rocatoro.musichub.activities.delivery.home.DeliveryHomeActivity
 import com.rocatoro.musichub.models.Category
 import com.rocatoro.musichub.models.Rol
@@ -38,20 +39,21 @@ class CategoriesAdapter(val context: Activity, val categories: ArrayList<Categor
         holder.textViewCategory.text = category.name
         Glide.with(context).load(category.image).into(holder.imageViewCategory)
 
-        /*
+
         holder.itemView.setOnClickListener{
-            goToRol(rol)
+            goToProducts(category)
         }
-        */
+
 
     }
 
-    /*
-    private fun goToRol(rol: Rol){
-            val i = Intent(context,ClientHomeActivity::class.java)
+
+    private fun goToProducts(category: Category){
+            val i = Intent(context,ClientProductsListActivity::class.java)
+            i.putExtra("idCategory",category.id)
             context.startActivity(i)
     }
-    */
+
     class CategoriesViewHolder(view: View): RecyclerView.ViewHolder(view){
 
         val textViewCategory: TextView

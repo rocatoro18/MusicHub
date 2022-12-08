@@ -54,6 +54,8 @@ dependencies {
 
     implementation 'com.github.dhaval2404:imagepicker:2.1'
 
+    //implementation 'com.github.tommasoberlose:progress-dialog:1.0.0'
+
 }
 
 apply plugin: 'com.android.application'

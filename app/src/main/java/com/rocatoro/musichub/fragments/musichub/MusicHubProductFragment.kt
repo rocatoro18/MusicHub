@@ -1,6 +1,7 @@
 package com.rocatoro.musichub.fragments.musichub
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -20,6 +21,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.gson.Gson
 import com.rocatoro.musichub.R
+import com.rocatoro.musichub.activities.BaseActivity
 import com.rocatoro.musichub.activities.adapters.CategoriesAdapter
 import com.rocatoro.musichub.models.Category
 import com.rocatoro.musichub.models.Product
@@ -28,6 +30,7 @@ import com.rocatoro.musichub.models.User
 import com.rocatoro.musichub.providers.CategoriesProvider
 import com.rocatoro.musichub.providers.ProductsProvider
 import com.rocatoro.musichub.utils.SharedPref
+
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -125,23 +128,44 @@ class MusicHubProductFragment : Fragment() {
             files.add(imageFile2!!)
             files.add(imageFile3!!)
 
+            //ProgressDialogFragment.showProgressBar(requireActivity())
+
             productsProvider?.create(files,product)?.enqueue(object: Callback<ResponseHttp>{
                 override fun onResponse(call: Call<ResponseHttp>, response: Response<ResponseHttp>
                 ) {
+                    //ProgressDialogFragment.hideProgressBar(requireActivity())
                     Log.d(TAG,"Response: $response")
                     Log.d(TAG,"Response: ${response.body()}")
 
                     Toast.makeText(requireContext(),response.body()?.message,Toast.LENGTH_LONG).show()
 
+                    resetForm()
+
                 }
 
                 override fun onFailure(call: Call<ResponseHttp>, t: Throwable) {
+                    //ProgressDialogFragment.hideProgressBar(requireActivity())
                     Log.d(TAG,"Error: ${t.message}")
                     Toast.makeText(requireContext(),"Error: ${t.message}",Toast.LENGTH_LONG).show()
                 }
             })
 
         }
+
+    }
+
+    private fun resetForm() {
+        editTextName?.setText("")
+        editTextDescription?.setText("")
+        editTextPrice?.setText("")
+        editTextStock?.setText("")
+        imageFile1 = null
+        imageFile2 = null
+        imageFile3 = null
+
+        imageViewProduct1?.setImageResource(R.drawable.ic_image)
+        imageViewProduct2?.setImageResource(R.drawable.ic_image)
+        imageViewProduct3?.setImageResource(R.drawable.ic_image)
 
     }
 

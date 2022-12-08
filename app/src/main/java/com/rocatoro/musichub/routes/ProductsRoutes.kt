@@ -1,6 +1,7 @@
 package com.rocatoro.musichub.routes
 
 import com.rocatoro.musichub.models.Category
+import com.rocatoro.musichub.models.Product
 import com.rocatoro.musichub.models.ResponseHttp
 import com.rocatoro.musichub.models.User
 import okhttp3.MultipartBody
@@ -15,15 +16,17 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
+import retrofit2.http.Path
 
 interface ProductsRoutes {
 
-    /*
-    @GET("categories/getAll")
-    fun getAll(
+
+    @GET("products/findByCategory/{id_category}")
+    fun findByCategory(
+        @Path("id_category") idCategory: String,
         @Header("Authorization") token: String
-    ): Call<ArrayList<Category>>
-    */
+    ): Call<ArrayList<Product>>
+
 
 
     @Multipart
