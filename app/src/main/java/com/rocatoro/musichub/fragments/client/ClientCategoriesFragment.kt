@@ -1,60 +1,99 @@
 package com.rocatoro.musichub.fragments.client
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.rocatoro.musichub.R
+import com.rocatoro.musichub.activities.adapters.CategoriesAdapter
+import com.rocatoro.musichub.models.Category
+import com.rocatoro.musichub.models.User
+import com.rocatoro.musichub.providers.CategoriesProvider
+import com.rocatoro.musichub.utils.SharedPref
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ClientCategoriesFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ClientCategoriesFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    var myView: View? = null
+
+    val TAG = "CategoriesFragment"
+    var recyclerViewCategories: RecyclerView? = null
+    var categoriesProvider: CategoriesProvider? = null
+    var adapter: CategoriesAdapter? = null
+    var user: User? = null
+    var sharedPref: SharedPref? = null
+    var categories = ArrayList<Category>()
+    var toolbar: Toolbar? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_client_categories, container, false)
+        myView = inflater.inflate(R.layout.fragment_client_categories, container, false)
+
+        toolbar = myView?.findViewById(R.id.toolbar)
+        toolbar?.title = "Categorías"
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+
+        recyclerViewCategories = myView?.findViewById(R.id.recyclerview_categories)
+
+        recyclerViewCategories?.layoutManager = LinearLayoutManager(requireContext()) // SPECIFY ELEMENTS WILL SHOW VERTICAL
+
+        sharedPref = SharedPref(requireActivity())
+
+        getUserFromSession()
+
+        categoriesProvider = CategoriesProvider(user?.sessionToken!!)
+
+        getCategories()
+
+        return myView
+
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ClientCategoriesFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ClientCategoriesFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun getCategories(){
+        categoriesProvider?.getAll()?.enqueue(object: Callback<ArrayList<Category>>{
+            override fun onResponse(
+                call: Call<ArrayList<Category>>,
+                response: Response<ArrayList<Category>>
+            ) {
+
+                if(response.body() != null){
+                    categories = response.body()!!
+                    adapter = CategoriesAdapter(requireActivity(),categories)
+                    recyclerViewCategories?.adapter = adapter
                 }
+
             }
+
+            override fun onFailure(call: Call<ArrayList<Category>>, t: Throwable) {
+                Log.d(TAG,"Error: ${t.message}")
+                Toast.makeText(requireContext(),"Error: ${t.message}",Toast.LENGTH_LONG).show()
+            }
+        })
     }
+
+    private fun getUserFromSession(){
+
+        val gson = Gson()
+
+        if(!sharedPref?.getData("user").isNullOrBlank()){
+            // IF USER EXIST IN SESSION
+            user = gson.fromJson(sharedPref?.getData("user"),User::class.java)
+            Log.d(TAG,"Usuario: $user")
+        }
+
+    }
+
 }

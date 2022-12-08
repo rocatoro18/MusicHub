@@ -15,11 +15,11 @@ class RetrofitClient {
 
     fun getClientWithToken(url: String, token: String): Retrofit{
         val client = OkHttpClient.Builder()
-            client.addInterceptor { chain ->
+        client.addInterceptor { chain ->
             val request = chain.request()
             val newRequest = request.newBuilder().header("Authorization",token)
-                chain.proceed(newRequest.build())
-            }
+            chain.proceed(newRequest.build())
+        }
         return Retrofit.Builder()
             .baseUrl(url)
             .client(client.build())
