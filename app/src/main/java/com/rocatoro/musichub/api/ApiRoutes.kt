@@ -1,6 +1,8 @@
 package com.rocatoro.musichub.api
 
+import com.rocatoro.musichub.models.Product
 import com.rocatoro.musichub.routes.CategoriesRoutes
+import com.rocatoro.musichub.routes.ProductsRoutes
 import com.rocatoro.musichub.routes.UsersRoutes
 import retrofit2.Retrofit
 
@@ -20,6 +22,10 @@ class ApiRoutes {
 
     fun getCategoriesRoutes(token: String): CategoriesRoutes {
         return retrofit.getClientWithToken(API_URL,token).create(CategoriesRoutes::class.java)
+    }
+
+    fun getProductsRoutes(token: String): ProductsRoutes {
+        return retrofit.getClientWithToken(API_URL,token).create(ProductsRoutes::class.java)
     }
 
 }

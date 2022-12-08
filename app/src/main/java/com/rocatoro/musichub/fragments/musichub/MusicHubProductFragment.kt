@@ -22,8 +22,11 @@ import com.google.gson.Gson
 import com.rocatoro.musichub.R
 import com.rocatoro.musichub.activities.adapters.CategoriesAdapter
 import com.rocatoro.musichub.models.Category
+import com.rocatoro.musichub.models.Product
+import com.rocatoro.musichub.models.ResponseHttp
 import com.rocatoro.musichub.models.User
 import com.rocatoro.musichub.providers.CategoriesProvider
+import com.rocatoro.musichub.providers.ProductsProvider
 import com.rocatoro.musichub.utils.SharedPref
 import retrofit2.Call
 import retrofit2.Callback
@@ -57,6 +60,8 @@ class MusicHubProductFragment : Fragment() {
     var categories = ArrayList<Category>()
 
     var idCategory = ""
+
+    var productsProvider: ProductsProvider? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -93,6 +98,7 @@ class MusicHubProductFragment : Fragment() {
         getUserFromSession()
 
         categoriesProvider = CategoriesProvider(user?.sessionToken!!)
+        productsProvider = ProductsProvider(user?.sessionToken!!)
 
         getCategories()
 
@@ -105,7 +111,35 @@ class MusicHubProductFragment : Fragment() {
         val priceText = editTextPrice?.text.toString()
         val stockText = editTextStock?.text.toString()
 
+        val files = ArrayList<File>()
+
         if (isValidForm(name,description,priceText,stockText)){
+            val product = Product(
+                name = name,
+                description = description,
+                price = priceText.toDouble(),
+                stock = stockText.toInt(),
+                idCategory = idCategory
+            )
+            files.add(imageFile1!!)
+            files.add(imageFile2!!)
+            files.add(imageFile3!!)
+
+            productsProvider?.create(files,product)?.enqueue(object: Callback<ResponseHttp>{
+                override fun onResponse(call: Call<ResponseHttp>, response: Response<ResponseHttp>
+                ) {
+                    Log.d(TAG,"Response: $response")
+                    Log.d(TAG,"Response: ${response.body()}")
+
+                    Toast.makeText(requireContext(),response.body()?.message,Toast.LENGTH_LONG).show()
+
+                }
+
+                override fun onFailure(call: Call<ResponseHttp>, t: Throwable) {
+                    Log.d(TAG,"Error: ${t.message}")
+                    Toast.makeText(requireContext(),"Error: ${t.message}",Toast.LENGTH_LONG).show()
+                }
+            })
 
         }
 
