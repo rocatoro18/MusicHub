@@ -1,11 +1,10 @@
 package com.rocatoro.musichub.fragments.client
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -14,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.rocatoro.musichub.R
 import com.rocatoro.musichub.activities.adapters.CategoriesAdapter
+import com.rocatoro.musichub.activities.client.shopping_bag.ClientShoppingBagActivity
 import com.rocatoro.musichub.models.Category
 import com.rocatoro.musichub.models.User
 import com.rocatoro.musichub.providers.CategoriesProvider
@@ -42,6 +42,8 @@ class ClientCategoriesFragment : Fragment() {
         // Inflate the layout for this fragment
         myView = inflater.inflate(R.layout.fragment_client_categories, container, false)
 
+        setHasOptionsMenu(true)
+
         toolbar = myView?.findViewById(R.id.toolbar)
         toolbar?.title = "Categorías"
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
@@ -60,6 +62,25 @@ class ClientCategoriesFragment : Fragment() {
 
         return myView
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_shopping_bag,menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        if(item.itemId == R.id.item_shopping_bag){
+            goToShoppingBag()
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun goToShoppingBag(){
+        val i = Intent(requireContext(),ClientShoppingBagActivity::class.java)
+        startActivity(i)
     }
 
     private fun getCategories(){

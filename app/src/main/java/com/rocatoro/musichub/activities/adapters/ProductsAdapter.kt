@@ -10,9 +10,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
 import com.rocatoro.musichub.R
 import com.rocatoro.musichub.activities.MusicHubStore.home.MusicHubHomeActivity
 import com.rocatoro.musichub.activities.client.home.ClientHomeActivity
+import com.rocatoro.musichub.activities.client.products.detail.ClientProductsDetailActivity
 import com.rocatoro.musichub.activities.delivery.home.DeliveryHomeActivity
 import com.rocatoro.musichub.models.Category
 import com.rocatoro.musichub.models.Product
@@ -40,20 +42,23 @@ class ProductsAdapter(val context: Activity, val products: ArrayList<Product>): 
         holder.textViewPrice.text = "${product.price}$"
         Glide.with(context).load(product.image1).into(holder.imageViewProduct)
 
-        /*
+
         holder.itemView.setOnClickListener{
-            goToRol(rol)
+            goToDetail(product)
         }
-        */
+
 
     }
 
-    /*
-    private fun goToRol(rol: Rol){
-            val i = Intent(context,ClientHomeActivity::class.java)
-            context.startActivity(i)
+
+    private fun goToDetail(product: Product){
+        // val gson = Gson()
+
+        val i = Intent(context,ClientProductsDetailActivity::class.java)
+        i.putExtra("product",product.toJson())
+        context.startActivity(i)
     }
-    */
+
     class ProductsViewHolder(view: View): RecyclerView.ViewHolder(view){
 
         val textViewName: TextView
