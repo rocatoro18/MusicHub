@@ -1,5 +1,6 @@
 package com.rocatoro.musichub.activities.client.shopping_bag
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.rocatoro.musichub.R
 import com.rocatoro.musichub.activities.adapters.ShoppingBagAdapter
+import com.rocatoro.musichub.activities.client.address.create.ClientAdressCreateActivity
+import com.rocatoro.musichub.activities.client.address.list.ClientAddressListActivity
 import com.rocatoro.musichub.models.Product
 import com.rocatoro.musichub.utils.SharedPref
 
@@ -53,6 +56,13 @@ class ClientShoppingBagActivity : AppCompatActivity() {
 
         getProductsFromSharedPref()
 
+        buttonNext?.setOnClickListener { goToAddressList() }
+
+    }
+
+    private fun goToAddressList(){
+        val i = Intent(this, ClientAddressListActivity::class.java)
+        startActivity(i)
     }
 
     fun setTotal(total: Double){
