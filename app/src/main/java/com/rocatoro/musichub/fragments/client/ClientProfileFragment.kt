@@ -94,6 +94,7 @@ class ClientProfileFragment : Fragment() {
 
     private fun logout(){
         sharedPref?.remove("user")
+        sharedPref?.remove("order")
         val i = Intent(requireContext(), LoginActivity::class.java)
         startActivity(i)
     }
