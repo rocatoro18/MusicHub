@@ -14,14 +14,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.rocatoro.musichub.R
 import com.rocatoro.musichub.activities.adapters.AddressAdapter
+import com.rocatoro.musichub.activities.adapters.ShoppingBagAdapter
 import com.rocatoro.musichub.activities.client.address.create.ClientAdressCreateActivity
 import com.rocatoro.musichub.activities.client.payments.form.ClientPaymentFormActivity
-import com.rocatoro.musichub.models.Address
-import com.rocatoro.musichub.models.ResponseHttp
-import com.rocatoro.musichub.models.User
+import com.rocatoro.musichub.models.*
 import com.rocatoro.musichub.providers.AddressProvider
+import com.rocatoro.musichub.providers.OrdersProvider
 import com.rocatoro.musichub.utils.SharedPref
 import retrofit2.Call
 import retrofit2.Callback
@@ -38,6 +39,7 @@ class ClientAddressListActivity : AppCompatActivity() {
     var adapter: AddressAdapter? = null
 
     var addressProvider: AddressProvider? = null
+    var ordersProvider: OrdersProvider? = null
 
     var sharedPref: SharedPref? = null
     var user: User? = null
@@ -47,11 +49,15 @@ class ClientAddressListActivity : AppCompatActivity() {
 
     val gson = Gson()
 
+    var selectedProducts = ArrayList<Product>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_client_address_list)
 
         sharedPref = SharedPref(this)
+
+        getProductsFromSharedPref()
 
         toolbar = findViewById(R.id.toolbar)
         toolbar?.title = "Mis direcciones"
@@ -66,6 +72,8 @@ class ClientAddressListActivity : AppCompatActivity() {
         getUserFromSession()
 
         addressProvider = AddressProvider(user?.sessionToken!!)
+        ordersProvider = OrdersProvider(user?.sessionToken!!)
+
         fabCreateAddress = findViewById(R.id.fab_address_create)
 
         fabCreateAddress?.setOnClickListener{goToAddressCreate()}
@@ -76,10 +84,46 @@ class ClientAddressListActivity : AppCompatActivity() {
 
     }
 
+    private fun createOrder(idAddress: String){
+        val order = Order(
+            products =selectedProducts,
+            id_client = user?.id!!,
+            id_address = idAddress
+        )
+
+        ordersProvider?.create(order)?.enqueue(object: Callback<ResponseHttp>{
+            override fun onResponse(call: Call<ResponseHttp>, response: Response<ResponseHttp>) {
+
+                if (response.body() != null){
+                    Toast.makeText(this@ClientAddressListActivity, "${response.body()?.message}", Toast.LENGTH_LONG).show()
+                }
+                else {
+                    Toast.makeText(this@ClientAddressListActivity, "Ocurrió un error en la petición", Toast.LENGTH_LONG).show()
+                }
+
+            }
+
+            override fun onFailure(call: Call<ResponseHttp>, t: Throwable) {
+                Toast.makeText(this@ClientAddressListActivity,"Error: ${t.message}",Toast.LENGTH_LONG).show()
+            }
+        })
+
+    }
+
+    private fun getProductsFromSharedPref(){
+
+        if(!sharedPref?.getData("order").isNullOrBlank()){ // EXISTS ORDER IN SHARE PREFERENCES
+            val type = object: TypeToken<ArrayList<Product>>(){}.type
+            selectedProducts = gson.fromJson(sharedPref?.getData("order"),type)
+        }
+
+    }
+
     private fun getAddressForSession(){
         if(!sharedPref?.getData("address").isNullOrBlank()){
             val a = gson.fromJson(sharedPref?.getData("address"),Address::class.java) // SI EXISTE UNA DIRECCIÓN
-            goToPaymentsForm()
+            createOrder(a.id!!)
+            //goToPaymentsForm()
         } else {
             Toast.makeText(this,"Seleccione una dirección",Toast.LENGTH_LONG).show()
         }
