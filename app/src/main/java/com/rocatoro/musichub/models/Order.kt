@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 class Order(
     @SerializedName("id") val id: String? = null,
     @SerializedName("id_client") val id_client: String,
-    @SerializedName("id_delivery") val id_delivery: String? = null,
+    @SerializedName("id_delivery") var id_delivery: String? = null,
     @SerializedName("id_address") val id_address: String,
     @SerializedName("status") val status: String? = null,
     @SerializedName("timestamp") val timestamp: String? = null,
