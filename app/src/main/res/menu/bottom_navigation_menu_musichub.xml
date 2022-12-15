@@ -17,6 +17,11 @@
         android:title="Productos"/>
 
     <item
+        android:id="@+id/item_product_proveedor"
+        android:icon="@drawable/ic_proveedor"
+        android:title="Productos Proveedor"/>
+
+    <item
         android:id="@+id/item_profile"
         android:icon="@drawable/ic_person_pin"
         android:title="Mi Perfil"/>

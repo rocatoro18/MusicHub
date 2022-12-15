@@ -8,6 +8,8 @@ class ApiRoutes {
 
     val API_URL = "http://192.168.1.17:3000/api/"
 
+    val API_URL_PROVEEDOR = "https://proveedores-api-production.up.railway.app/api/"
+
     val retrofit = RetrofitClient()
 
     fun getUsersRoutes(): UsersRoutes {
@@ -24,6 +26,10 @@ class ApiRoutes {
 
     fun getProductsRoutes(token: String): ProductsRoutes {
         return retrofit.getClientWithToken(API_URL,token).create(ProductsRoutes::class.java)
+    }
+
+    fun getProductosProveedorRoutes(token: String): ProductsProveedorRoutes {
+        return retrofit.getClientWithToken(API_URL_PROVEEDOR,token).create(ProductsProveedorRoutes::class.java)
     }
 
     fun getAddressRoutes(token: String): AddressRoutes {
