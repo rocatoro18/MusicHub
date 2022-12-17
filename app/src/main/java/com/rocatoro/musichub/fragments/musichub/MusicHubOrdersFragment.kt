@@ -62,6 +62,9 @@ class MusicHubOrdersFragment : Fragment() {
                 3 -> {
                     tab.text = "ENTREGADO"
                 }
+                4 -> {
+                    tab.text = "REGISTRO VENTA EXTERNA"
+                }
             }
 
         }.attach()

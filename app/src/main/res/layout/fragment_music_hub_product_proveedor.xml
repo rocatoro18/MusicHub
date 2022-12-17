@@ -69,7 +69,19 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:text="MANDAR PRODUCTO A PROVEEDOR"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="110dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        />
+
+    <Button
+        android:id="@+id/btn_venta_externa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:text="Mostrar Registro Venta Externa"
+        android:layout_marginBottom="60dp"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"

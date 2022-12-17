@@ -3,10 +3,11 @@ package com.rocatoro.musichub.api
 import com.rocatoro.musichub.models.Product
 import com.rocatoro.musichub.routes.*
 import retrofit2.Retrofit
+import retrofit2.create
 
 class ApiRoutes {
 
-    val API_URL = "http://192.168.1.17:3000/api/"
+    val API_URL = "http://192.168.1.5:3000/api/"
 
     val API_URL_PROVEEDOR = "https://proveedores-api-production.up.railway.app/api/"
 
@@ -22,6 +23,10 @@ class ApiRoutes {
 
     fun getCategoriesRoutes(token: String): CategoriesRoutes {
         return retrofit.getClientWithToken(API_URL,token).create(CategoriesRoutes::class.java)
+    }
+
+    fun getVentaExternaRoutes(token: String): VentaExternaRoutes{
+        return retrofit.getClientWithToken(API_URL,token).create(VentaExternaRoutes::class.java)
     }
 
     fun getProductsRoutes(token: String): ProductsRoutes {

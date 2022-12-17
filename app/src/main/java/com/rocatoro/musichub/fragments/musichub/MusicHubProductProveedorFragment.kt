@@ -24,6 +24,7 @@ import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.gson.Gson
 import com.rocatoro.musichub.R
 import com.rocatoro.musichub.activities.BaseActivity
+import com.rocatoro.musichub.activities.MusicHubStore.ventaexterna.RegistroVentaExternaActivity
 import com.rocatoro.musichub.activities.adapters.CategoriesAdapter
 import com.rocatoro.musichub.models.*
 import com.rocatoro.musichub.providers.CategoriesProvider
@@ -49,6 +50,7 @@ class MusicHubProductProveedorFragment : Fragment() {
 
 
     var buttonCreate: Button? = null
+    var buttonVentaExterna: Button? = null
 
     var user: User? = null
     var sharedPref: SharedPref? = null
@@ -68,7 +70,9 @@ class MusicHubProductProveedorFragment : Fragment() {
         editTextQuantity = myView?.findViewById(R.id.et_quantity)
 
         buttonCreate = myView?.findViewById(R.id.btn_create)
+        buttonVentaExterna = myView?.findViewById(R.id.btn_venta_externa)
 
+        buttonVentaExterna?.setOnClickListener { goToRegVentaExterna() }
 
         buttonCreate?.setOnClickListener {
             createProduct()
@@ -83,6 +87,11 @@ class MusicHubProductProveedorFragment : Fragment() {
 
 
         return myView
+    }
+
+    private fun goToRegVentaExterna(){
+        val i = Intent(requireContext(),RegistroVentaExternaActivity::class.java)
+        startActivity(i)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="15dp"
+    app:cardCornerRadius="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        
+        <com.rocatoro.musichub.utils.MSPTextViewBold
+            android:id="@+id/textview_venta_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Venta"
+            android:background="@color/colorPrimary"
+            android:padding="5dp"
+            android:textAlignment="center"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp">
+
+          <com.rocatoro.musichub.utils.MSPTextViewBold
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="Nombre Producto: "/>
+
+            <com.rocatoro.musichub.utils.MSPTextViewBold
+                android:id="@+id/textview_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="nombre producto"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp">
+
+            <com.rocatoro.musichub.utils.MSPTextViewBold
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cantidad: "/>
+
+            <com.rocatoro.musichub.utils.MSPTextViewBold
+                android:id="@+id/textview_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp">
+
+            <com.rocatoro.musichub.utils.MSPTextViewBold
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Monto Total: "/>
+
+            <com.rocatoro.musichub.utils.MSPTextViewBold
+                android:id="@+id/textview_total_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:text="0$"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp">
+
+            <com.rocatoro.musichub.utils.MSPTextViewBold
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No. Serie Producto: "/>
+
+            <com.rocatoro.musichub.utils.MSPTextViewBold
+                android:id="@+id/textview_no_serie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:text="000000"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
