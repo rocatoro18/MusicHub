@@ -18,6 +18,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.rocatoro.musichub.R
 import com.rocatoro.musichub.models.Product
+import com.rocatoro.musichub.models.ProductToTransport
 import com.rocatoro.musichub.utils.SharedPref
 import kotlinx.android.synthetic.main.activity_client_products_detail.*
 import org.w3c.dom.Text
@@ -28,6 +29,7 @@ class ClientProductsDetailActivity : AppCompatActivity() {
     var toolbar: Toolbar? = null
 
     var product: Product? = null
+    var productqToTransport: ProductToTransport? = null
     val gson = Gson()
 
     var imageSlider: ImageSlider? = null
@@ -44,6 +46,7 @@ class ClientProductsDetailActivity : AppCompatActivity() {
 
     var sharedPref: SharedPref? = null
     var selectedProducts = ArrayList<Product>()
+    var selectedProductsToTransport = ArrayList<ProductToTransport>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

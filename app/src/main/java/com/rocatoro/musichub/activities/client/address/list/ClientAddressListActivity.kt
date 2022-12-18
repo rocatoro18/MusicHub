@@ -59,6 +59,8 @@ class ClientAddressListActivity : AppCompatActivity() {
 
     var selectedProducts = ArrayList<Product>()
 
+    var selectedProductsToTransport = ArrayList<ProductToTransport>()
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,13 +109,15 @@ class ClientAddressListActivity : AppCompatActivity() {
         val order = Order(
             products =selectedProducts,
             id_client = user?.id!!,
-            id_address = idAddress
+            id_address = idAddress,
+            numero_venta = numeroventa
         )
 
         val solicitudTransporte = SolicitudTransporte(
             numeroVenta = numeroventa,
             //productos = "Productos varios de Music+",
-            productos = selectedProducts.toString(),
+            //productos = selectedProductsToTransport,
+            productos = "Productos Music+",
             nombreDestinatario = user?.name!!,
             direccionDestino = a?.address!!,
             fechaEntrega = 20221212,
@@ -121,6 +125,8 @@ class ClientAddressListActivity : AppCompatActivity() {
         )
 
         Log.d(TAG,"solicitud Transporte: $solicitudTransporte")
+        Log.d(TAG,"Productos para transporte: $selectedProductsToTransport")
+
 
         solicitudTransporteProvier?.create(solicitudTransporte)?.enqueue(object: Callback<ResponseHttp>{
             override fun onResponse(call: Call<ResponseHttp>, response: Response<ResponseHttp>) {
@@ -164,6 +170,7 @@ class ClientAddressListActivity : AppCompatActivity() {
         if(!sharedPref?.getData("order").isNullOrBlank()){ // EXISTS ORDER IN SHARE PREFERENCES
             val type = object: TypeToken<ArrayList<Product>>(){}.type
             selectedProducts = gson.fromJson(sharedPref?.getData("order"),type)
+            //selectedProductsToTransport = gson.fromJson(sharedPref?.getData("orderToTransport"),type)
         }
 
     }

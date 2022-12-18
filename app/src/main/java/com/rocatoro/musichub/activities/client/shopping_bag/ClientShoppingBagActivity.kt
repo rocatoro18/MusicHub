@@ -19,6 +19,7 @@ import com.rocatoro.musichub.activities.adapters.ShoppingBagAdapter
 import com.rocatoro.musichub.activities.client.address.create.ClientAdressCreateActivity
 import com.rocatoro.musichub.activities.client.address.list.ClientAddressListActivity
 import com.rocatoro.musichub.models.Product
+import com.rocatoro.musichub.models.ProductToTransport
 import com.rocatoro.musichub.utils.SharedPref
 
 class ClientShoppingBagActivity : AppCompatActivity() {
@@ -35,6 +36,7 @@ class ClientShoppingBagActivity : AppCompatActivity() {
     var gson = Gson()
 
     var selectedProducts = ArrayList<Product>()
+    var selectedProductsToTransport = ArrayList<ProductToTransport>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +76,7 @@ class ClientShoppingBagActivity : AppCompatActivity() {
         if(!sharedPref?.getData("order").isNullOrBlank()){ // EXISTS ORDER IN SHARE PREFERENCES
             val type = object: TypeToken<ArrayList<Product>>(){}.type
             selectedProducts = gson.fromJson(sharedPref?.getData("order"),type)
+            //selectedProductsToTransport = gson.fromJson(sharedPref?.getData("orderToTransport"),type)
 
             adapter = ShoppingBagAdapter(this,selectedProducts)
             recyclerViewShoppingBag?.adapter = adapter

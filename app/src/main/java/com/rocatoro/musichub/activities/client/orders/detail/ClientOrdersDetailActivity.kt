@@ -12,11 +12,14 @@ import com.google.gson.Gson
 import com.rocatoro.musichub.R
 import com.rocatoro.musichub.activities.adapters.OrderProductsAdapter
 import com.rocatoro.musichub.models.Order
+import com.rocatoro.musichub.models.OrderToTransport
+import com.rocatoro.musichub.models.ProductToTransport
 
 class ClientOrdersDetailActivity : AppCompatActivity() {
 
     val TAG = "ClientOrdersDetail"
     var order: Order? = null
+    var orderToTransport: OrderToTransport? = null
     val gson = Gson()
 
     var toolbar: Toolbar? = null
@@ -35,6 +38,7 @@ class ClientOrdersDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_client_orders_detail)
 
         order = gson.fromJson(intent.getStringExtra("order"),Order::class.java)
+        //orderToTransport = gson.fromJson(intent.getStringExtra("orderToTransport"),OrderToTransport::class.java)
 
         toolbar = findViewById(R.id.toolbar)
         toolbar?.title = "Orden # ${order?.id}"

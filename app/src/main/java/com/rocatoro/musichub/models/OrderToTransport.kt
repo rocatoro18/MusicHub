@@ -3,7 +3,7 @@ package com.rocatoro.musichub.models
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 
-class Order(
+class OrderToTransport(
     @SerializedName("id") val id: String? = null,
     @SerializedName("id_client") val id_client: String,
     @SerializedName("id_delivery") var id_delivery: String? = null,
@@ -11,7 +11,7 @@ class Order(
     @SerializedName("numero_venta") val numero_venta: Int,
     @SerializedName("status") val status: String? = null,
     @SerializedName("timestamp") val timestamp: String? = null,
-    @SerializedName("products") val products: ArrayList<Product>,
+    @SerializedName("products") val products: ArrayList<ProductToTransport>,
     @SerializedName("client") val client: User? = null,
     @SerializedName("address") val address: Address? = null
 

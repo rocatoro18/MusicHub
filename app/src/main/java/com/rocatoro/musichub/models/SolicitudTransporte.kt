@@ -2,7 +2,6 @@ package com.rocatoro.musichub.models
 
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
-import java.time.LocalDateTime
 
 class SolicitudTransporte(
     @SerializedName("numeroVenta") val numeroVenta: Int,
