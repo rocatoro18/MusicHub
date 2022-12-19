@@ -91,9 +91,9 @@ class ClientAddressListActivity : AppCompatActivity() {
 
         fabCreateAddress?.setOnClickListener{goToAddressCreate()}
 
-        //btnNext?.setOnClickListener { getAddressForSession() }
+        btnNext?.setOnClickListener { getAddressForSession() }
 
-        btnNext?.setOnClickListener { goToClientPaymentList() }
+        //btnNext?.setOnClickListener { goToClientPaymentList() }
 
         getAddress()
 
@@ -113,6 +113,7 @@ class ClientAddressListActivity : AppCompatActivity() {
             products =selectedProducts,
             id_client = user?.id!!,
             id_address = idAddress,
+            id_payment = idAddress,
             numero_venta = numeroventa
         )
 
@@ -183,8 +184,9 @@ class ClientAddressListActivity : AppCompatActivity() {
         if(!sharedPref?.getData("address").isNullOrBlank()){
             //val a = gson.fromJson(sharedPref?.getData("address"),Address::class.java) // SI EXISTE UNA DIRECCIÓN
             a = gson.fromJson(sharedPref?.getData("address"),Address::class.java) // SI EXISTE UNA DIRECCIÓN
-            createOrder(a?.id!!)
+            //createOrder(a?.id!!)
             //goToPaymentsForm()
+            goToClientPaymentList()
         } else {
             Toast.makeText(this,"Seleccione una dirección",Toast.LENGTH_LONG).show()
         }

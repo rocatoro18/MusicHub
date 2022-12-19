@@ -18,13 +18,13 @@ import retrofit2.http.Path
 interface PaymentRoutes {
 
 
-    /*
-    @GET("address/findByUser/{id_user}")
-    fun getAddress(
+
+    @GET("payment/findByUser/{id_user}")
+    fun getPayment(
         @Path("id_user") id_user: String,
         @Header("Authorization") token: String
-    ): Call<ArrayList<Address>>
-    */
+    ): Call<ArrayList<Payment>>
+
 
 
     //@Multipart

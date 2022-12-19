@@ -9,6 +9,7 @@ class Order(
     @SerializedName("id_delivery") var id_delivery: String? = null,
     @SerializedName("id_address") val id_address: String,
     @SerializedName("numero_venta") val numero_venta: Int,
+    @SerializedName("id_payment") val id_payment: String,
     @SerializedName("status") val status: String? = null,
     @SerializedName("timestamp") val timestamp: String? = null,
     @SerializedName("products") val products: ArrayList<Product>,
@@ -22,7 +23,7 @@ class Order(
     }
 
     override fun toString(): String {
-        return "Order(id=$id, id_client='$id_client', id_delivery=$id_delivery, id_address='$id_address', numero_venta=$numero_venta, status=$status, timestamp=$timestamp, products=$products, client=$client, address=$address)"
+        return "Order(id=$id, id_client='$id_client', id_delivery=$id_delivery, id_address='$id_address', numero_venta=$numero_venta, id_payment='$id_payment', status=$status, timestamp=$timestamp, products=$products, client=$client, address=$address)"
     }
 
 

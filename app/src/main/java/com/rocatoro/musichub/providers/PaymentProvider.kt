@@ -23,11 +23,11 @@ class PaymentProvider(val token: String) {
     }
 
 
-    /*
-    fun getAddress(id_user: String): Call<ArrayList<Address>>?{
-        return  addressRoutes?.getAddress(id_user,token)
+
+    fun getPayment(id_user: String): Call<ArrayList<Payment>>?{
+        return  paymentRoutes?.getPayment(id_user,token)
     }
-     */
+
 
 
     fun create(payment: Payment): Call<ResponseHttp>? {

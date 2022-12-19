@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -81,8 +82,23 @@ class ClientShoppingBagActivity : AppCompatActivity() {
             adapter = ShoppingBagAdapter(this,selectedProducts)
             recyclerViewShoppingBag?.adapter = adapter
 
+        } else {
+            Toast.makeText(this,"El carrito esta vacio",Toast.LENGTH_LONG).show()
         }
 
     }
+
+    /*
+    private fun getProductsFromSharedPrefCHECK(){
+
+        if(!sharedPref?.getData("order").isNullOrBlank()){ // EXISTS ORDER IN SHARE PREFERENCES
+            goToAddressList()
+
+        } else {
+            Toast.makeText(this,"El carrito esta vacio",Toast.LENGTH_LONG).show()
+        }
+
+    }
+     */
 
 }

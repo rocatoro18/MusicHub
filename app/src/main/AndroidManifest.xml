@@ -22,12 +22,20 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".activities.client.payments.list.ClientPaymentListActivity"
+            android:name=".activities.client.payments.form.ClientPaymentFinishActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".activities.client.payments.list.ClientPaymentListActivity"
+            android:exported="false"
             android:parentActivityName=".activities.client.address.list.ClientAddressListActivity"
-            >
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -35,10 +43,9 @@
         <activity
             android:name=".activities.client.payments.create.ClientPaymentCreateActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".activities.client.payments.list.ClientPaymentListActivity"
-            >
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -76,6 +83,7 @@
         <activity
             android:name=".activities.client.payments.form.ClientPaymentFormActivity"
             android:exported="false"
+            android:parentActivityName=".activities.client.payments.list.ClientPaymentListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
