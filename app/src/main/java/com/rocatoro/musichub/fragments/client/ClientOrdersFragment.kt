@@ -38,7 +38,7 @@ class ClientOrdersFragment : Fragment() {
         tabLayout?.isInlineLabel = true
 
 
-        var numberOfTabs = 4
+        var numberOfTabs = 1
 
         var adapter = TabsPagerAdapter(requireActivity().supportFragmentManager,lifecycle,numberOfTabs)
 
@@ -50,17 +50,22 @@ class ClientOrdersFragment : Fragment() {
 
             when(position){
                 0 -> {
+                    tab.text = "PEDIDOS"
+                }
+                /*
+                1 -> {
                     tab.text = "PAGADO"
                 }
-                1 -> {
+                2 -> {
                     tab.text = "DESPACHADO"
                 }
-                2 -> {
+                3 -> {
                     tab.text = "EN CAMINO"
                 }
-                3 -> {
+                4 -> {
                     tab.text = "ENTREGADO"
                 }
+                 */
             }
 
         }.attach()

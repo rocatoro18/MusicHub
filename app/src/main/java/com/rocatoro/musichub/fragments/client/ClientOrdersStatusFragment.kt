@@ -11,7 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.rocatoro.musichub.R
+import com.rocatoro.musichub.activities.adapters.EstadoPedidoClientAdapter
 import com.rocatoro.musichub.activities.adapters.OrdersClientAdapter
+import com.rocatoro.musichub.models.Estado_Transporte
 import com.rocatoro.musichub.models.Order
 import com.rocatoro.musichub.models.User
 import com.rocatoro.musichub.providers.OrdersProvider
@@ -32,6 +34,7 @@ class ClientOrdersStatusFragment : Fragment() {
 
     var recyclerViewOrders: RecyclerView? = null
     var adapter: OrdersClientAdapter? = null
+    var adapterEstadoPedido: EstadoPedidoClientAdapter? = null
 
     var status = ""
 
@@ -52,9 +55,29 @@ class ClientOrdersStatusFragment : Fragment() {
         recyclerViewOrders = myView?.findViewById(R.id.recyclerview_orders)
         recyclerViewOrders?.layoutManager = LinearLayoutManager(requireContext())
 
-        getOrders()
+        getEstadoPedidos()
+        //getOrders()
 
         return myView
+    }
+
+    private fun getEstadoPedidos(){
+        ordersProvider?.getByClientAndSaleNumber(user?.id!!)?.enqueue(object: Callback<ArrayList<Estado_Transporte>>{
+            override fun onResponse(call: Call<ArrayList<Estado_Transporte>>, response: Response<ArrayList<Estado_Transporte>>
+            ) {
+                if (response.body() != null){
+
+                    val estadopedidos = response.body()
+                    adapterEstadoPedido = EstadoPedidoClientAdapter(requireActivity(),estadopedidos!!)
+                    recyclerViewOrders?.adapter = adapterEstadoPedido
+
+                }
+            }
+
+            override fun onFailure(call: Call<ArrayList<Estado_Transporte>>, t: Throwable) {
+                Toast.makeText(requireActivity(),"Error: ${t.message}",Toast.LENGTH_LONG).show()
+            }
+        })
     }
 
     private fun getOrders(){
