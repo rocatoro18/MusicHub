@@ -8,7 +8,7 @@ import retrofit2.create
 class ApiRoutes {
 
     //val API_URL = "http://192.168.1.5:3000/api/"
-    val API_URL = "https://music-hub.herokuapp.com/"
+    val API_URL = "https://music-hub.herokuapp.com/api/"
 
     val API_URL_PROVEEDOR = "https://proveedores-api-production.up.railway.app/api/"
 

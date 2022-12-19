@@ -109,7 +109,7 @@ class ClientPaymentFormActivity : AppCompatActivity() {
             nombreDestinatario = user?.name!!,
             direccionDestino = address?.address!!,
             fechaEntrega = 20221231,
-            idCliente = user?.id!!.toInt()
+            idCliente = 7
         )
 
         ordersProvider?.create(order)?.enqueue(object: Callback<ResponseHttp> {
