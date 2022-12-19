@@ -21,6 +21,7 @@ import com.rocatoro.musichub.R
 import com.rocatoro.musichub.activities.adapters.AddressAdapter
 import com.rocatoro.musichub.activities.client.address.create.ClientAdressCreateActivity
 import com.rocatoro.musichub.activities.client.payments.form.ClientPaymentFormActivity
+import com.rocatoro.musichub.activities.client.payments.list.ClientPaymentListActivity
 import com.rocatoro.musichub.models.*
 import com.rocatoro.musichub.providers.AddressProvider
 import com.rocatoro.musichub.providers.OrdersProvider
@@ -90,7 +91,9 @@ class ClientAddressListActivity : AppCompatActivity() {
 
         fabCreateAddress?.setOnClickListener{goToAddressCreate()}
 
-        btnNext?.setOnClickListener { getAddressForSession() }
+        //btnNext?.setOnClickListener { getAddressForSession() }
+
+        btnNext?.setOnClickListener { goToClientPaymentList() }
 
         getAddress()
 
@@ -219,6 +222,11 @@ class ClientAddressListActivity : AppCompatActivity() {
 
     private fun goToAddressCreate(){
         val i = Intent(this,ClientAdressCreateActivity::class.java)
+        startActivity(i)
+    }
+
+    private fun goToClientPaymentList(){
+        val i = Intent(this,ClientPaymentListActivity::class.java)
         startActivity(i)
     }
 

@@ -47,6 +47,10 @@ class ApiRoutes {
         return retrofit.getClientWithToken(API_URL,token).create(AddressRoutes::class.java)
     }
 
+    fun getPaymentRoutes(token: String): PaymentRoutes {
+        return retrofit.getClientWithToken(API_URL,token).create(PaymentRoutes::class.java)
+    }
+
     fun getOrdersRoutes(token: String): OrdersRoutes {
         return retrofit.getClientWithToken(API_URL,token).create(OrdersRoutes::class.java)
     }
