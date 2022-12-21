@@ -14,6 +14,8 @@ class ApiRoutes {
 
     val API_URL_TRANSPORTE = "https://transportesithapi-production.up.railway.app/api/"
 
+    val API_URL_BANCO = "http://www.itbank.somee.com/api/"
+
     val retrofit = RetrofitClient()
 
     fun getUsersRoutes(): UsersRoutes {
@@ -46,6 +48,10 @@ class ApiRoutes {
 
     fun getAddressRoutes(token: String): AddressRoutes {
         return retrofit.getClientWithToken(API_URL,token).create(AddressRoutes::class.java)
+    }
+
+    fun getPaymentITHBankRoutes(token: String): PaymentITHBankRoutes {
+        return retrofit.getClientWithToken(API_URL_BANCO,token).create(PaymentITHBankRoutes::class.java)
     }
 
     fun getPaymentRoutes(token: String): PaymentRoutes {

@@ -16,6 +16,7 @@ import com.google.gson.reflect.TypeToken
 import com.rocatoro.musichub.R
 import com.rocatoro.musichub.models.*
 import com.rocatoro.musichub.providers.OrdersProvider
+import com.rocatoro.musichub.providers.PaymentITHBankProvider
 import com.rocatoro.musichub.providers.SolicitudTransporteProvider
 import com.rocatoro.musichub.utils.SharedPref
 import retrofit2.Call
@@ -42,10 +43,11 @@ class ClientPaymentFormActivity : AppCompatActivity() {
 
     var textViewTotal: TextView? = null
 
-    var total: Double? = null
+    var total = 0.0
 
     var ordersProvider: OrdersProvider? = null
     var solicitudTransporteProvier: SolicitudTransporteProvider? = null
+    var paymentITHBankProvider: PaymentITHBankProvider? = null
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,10 +70,11 @@ class ClientPaymentFormActivity : AppCompatActivity() {
 
         ordersProvider = OrdersProvider(user?.sessionToken!!)
         solicitudTransporteProvier = SolicitudTransporteProvider(user?.sessionToken!!)
+        paymentITHBankProvider = PaymentITHBankProvider(user?.sessionToken!!)
 
         btnPay = findViewById(R.id.btn_pay)
         textViewTotal = findViewById(R.id.textview_total)
-
+        textViewTotal?.text = total.toString()
         //updateTotal()
 
 
@@ -112,39 +115,72 @@ class ClientPaymentFormActivity : AppCompatActivity() {
             idCliente = 7
         )
 
-        ordersProvider?.create(order)?.enqueue(object: Callback<ResponseHttp> {
-            override fun onResponse(call: Call<ResponseHttp>, response: Response<ResponseHttp>) {
+        val account_no = payment?.account_no
+        val cvv = payment?.cvv
 
+        var fecha = payment?.expiry
+
+        val fechas = fecha?.split("/")
+
+        val fechaVencimientoP1 = fechas?.get(0)
+        val fehcasVencimientoP2 = fechas?.get(1)
+
+        val paymentITHBank = PaymentITHBank(
+            CuentaOrigen = account_no.toString(),
+            FechaVencimientoP1 = fechaVencimientoP1.toString(),
+            FechaVencimientoP2 = fehcasVencimientoP2.toString(),
+            Token = cvv.toString(),
+            CuentaDestino = 2852326554876598.toString(),
+            Monto = total.toString()
+        )
+
+        paymentITHBankProvider?.createPaymentITHBank(paymentITHBank)?.enqueue(object: Callback<ResponseHttp>{
+            override fun onResponse(call: Call<ResponseHttp>, response: Response<ResponseHttp>) {
                 if (response.body() != null){
-                    Toast.makeText(this@ClientPaymentFormActivity, "${response.body()?.message}", Toast.LENGTH_LONG).show()
-                    solicitudTransporteProvier?.create(solicitudTransporte)?.enqueue(object: Callback<ResponseHttp>{
+                    //Toast.makeText(this@ClientPaymentFormActivity, "PAGO ENVIADO A ITH BANK ${response.body()?.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@ClientPaymentFormActivity, "PAGO ENVIADO A ITH BANK", Toast.LENGTH_LONG).show()
+                    ordersProvider?.create(order)?.enqueue(object: Callback<ResponseHttp> {
                         override fun onResponse(call: Call<ResponseHttp>, response: Response<ResponseHttp>) {
-                            Log.d(TAG,"RESPUESTA SERVER TRANSPORTE: ${response.body()}")
+
                             if (response.body() != null){
-                                Toast.makeText(this@ClientPaymentFormActivity, "Solicitud de transporte enviada", Toast.LENGTH_LONG).show()
+                                Toast.makeText(this@ClientPaymentFormActivity, "${response.body()?.message}", Toast.LENGTH_LONG).show()
+                                solicitudTransporteProvier?.create(solicitudTransporte)?.enqueue(object: Callback<ResponseHttp>{
+                                    override fun onResponse(call: Call<ResponseHttp>, response: Response<ResponseHttp>) {
+                                        Log.d(TAG,"RESPUESTA SERVER TRANSPORTE: ${response.body()}")
+                                        if (response.body() != null){
+                                            Toast.makeText(this@ClientPaymentFormActivity, "Solicitud de transporte enviada", Toast.LENGTH_LONG).show()
+                                        }
+                                        else {
+                                            Toast.makeText(this@ClientPaymentFormActivity, "Ocurrió un error en la petición", Toast.LENGTH_LONG).show()
+                                        }
+                                    }
+
+                                    override fun onFailure(call: Call<ResponseHttp>, t: Throwable) {
+                                        Toast.makeText(this@ClientPaymentFormActivity,"Error: ${t.message}",Toast.LENGTH_LONG).show()
+                                    }
+                                })
+                                goToPaymentFinish()
                             }
                             else {
                                 Toast.makeText(this@ClientPaymentFormActivity, "Ocurrió un error en la petición", Toast.LENGTH_LONG).show()
                             }
+
                         }
 
                         override fun onFailure(call: Call<ResponseHttp>, t: Throwable) {
-                            Toast.makeText(this@ClientPaymentFormActivity,"Error: ${t.message}",Toast.LENGTH_LONG).show()
+                            Toast.makeText(this@ClientPaymentFormActivity,"Error: ${t.message}", Toast.LENGTH_LONG).show()
                         }
                     })
-                    goToPaymentFinish()
-                }
-                else {
-                    Toast.makeText(this@ClientPaymentFormActivity, "Ocurrió un error en la petición", Toast.LENGTH_LONG).show()
-                }
 
+                } else {
+                    Toast.makeText(this@ClientPaymentFormActivity, "Ocurrió un error en el pago", Toast.LENGTH_LONG).show()
+                }
             }
 
             override fun onFailure(call: Call<ResponseHttp>, t: Throwable) {
                 Toast.makeText(this@ClientPaymentFormActivity,"Error: ${t.message}", Toast.LENGTH_LONG).show()
             }
         })
-
 
     }
 
@@ -172,12 +208,11 @@ class ClientPaymentFormActivity : AppCompatActivity() {
             val type = object: TypeToken<ArrayList<Product>>(){}.type
             selectedProducts = gson.fromJson(sharedPref?.getData("order"),type)
             //selectedProductsToTransport = gson.fromJson(sharedPref?.getData("orderToTransport"),type)
-            /*
+
             for(p in selectedProducts){
-                total = total!! + (p.price * p.quantity!!)
+                total += (p.price * p.quantity!!)
             }
 
-             */
         }
 
     }
