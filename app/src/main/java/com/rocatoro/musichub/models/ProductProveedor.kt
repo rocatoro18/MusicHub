@@ -9,7 +9,8 @@ class ProductProveedor(
     @SerializedName("cantidadUnidad") var cantidadUnidad: Int,
     @SerializedName("total") var total: Double,
     @SerializedName("fecha") var fecha: String,
-    @SerializedName("idProveedor") val idProveedor: Int = 4
+    @SerializedName("idProveedor") val idProveedor: Int = 30,
+    @SerializedName("descripcion") var descripcion: String = "Sin descripción",
 
 ) {
     fun toJson(): String {
@@ -17,7 +18,7 @@ class ProductProveedor(
     }
 
     override fun toString(): String {
-        return "ProductProveedor(nombre='$nombre', importe=$importe, cantidadUnidad=$cantidadUnidad, total=$total, fecha='$fecha', idProveedor=$idProveedor)"
+        return "ProductProveedor(nombre='$nombre', importe=$importe, cantidadUnidad=$cantidadUnidad, total=$total, fecha='$fecha', idProveedor=$idProveedor, descripcion='$descripcion')"
     }
 
 
