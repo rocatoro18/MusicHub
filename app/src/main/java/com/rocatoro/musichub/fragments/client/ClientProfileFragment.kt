@@ -18,7 +18,7 @@ import com.rocatoro.musichub.activities.SelectRolesActivity
 import com.rocatoro.musichub.models.User
 import com.rocatoro.musichub.utils.SharedPref
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.android.synthetic.main.fragment_client_profile.*
+//import kotlinx.android.synthetic.main.fragment_client_profile.*
 
 class ClientProfileFragment : Fragment() {
 

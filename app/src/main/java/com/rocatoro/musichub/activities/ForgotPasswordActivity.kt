@@ -3,29 +3,35 @@ package com.rocatoro.musichub.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.rocatoro.musichub.R
-import kotlinx.android.synthetic.main.activity_forgot_password.*
+import com.rocatoro.musichub.databinding.ActivityForgotPasswordBinding
+//import kotlinx.android.synthetic.main.activity_forgot_password.*
 
 class ForgotPasswordActivity : BaseActivity() {
+
+    private lateinit var binding: ActivityForgotPasswordBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_forgot_password)
+        binding = ActivityForgotPasswordBinding.inflate(layoutInflater)
+        //setContentView(R.layout.activity_forgot_password)
+        setContentView(binding.root)
 
         setupActionBar()
 
     }
 
     private fun setupActionBar(){
-        setSupportActionBar(toolbar_forgot_password_activity)
+        setSupportActionBar(binding.toolbarForgotPasswordActivity)
 
         val actionBar = supportActionBar
         if(actionBar != null){
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setHomeAsUpIndicator(R.drawable.ic_black_color_back_24)
         }
-        toolbar_forgot_password_activity.setNavigationOnClickListener { onBackPressed() }
+        binding.toolbarForgotPasswordActivity.setNavigationOnClickListener { onBackPressed() }
 
-        btn_submit.setOnClickListener {
-            val email: String = et_email_forgot_pw.text.toString().trim { it <= ' ' }
+        binding.btnSubmit.setOnClickListener {
+            val email: String = binding.etEmailForgotPw.text.toString().trim { it <= ' ' }
             if(email.isEmpty()){
                 showErrorSnackBar(resources.getString(R.string.err_msg_enter_email),true)
             } else {

@@ -18,7 +18,7 @@ import com.rocatoro.musichub.fragments.musichub.MusicHubProductFragment
 import com.rocatoro.musichub.fragments.musichub.MusicHubProductProveedorFragment
 import com.rocatoro.musichub.models.User
 import com.rocatoro.musichub.utils.SharedPref
-import kotlinx.android.synthetic.main.activity_client_home.*
+//import kotlinx.android.synthetic.main.activity_client_home.*
 
 class MusicHubHomeActivity : AppCompatActivity() {
     private val TAG = "MusicHubHomeActivity"

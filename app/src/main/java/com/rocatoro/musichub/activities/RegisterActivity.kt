@@ -12,23 +12,32 @@ import android.widget.Toast
 import com.google.gson.Gson
 import com.rocatoro.musichub.R
 import com.rocatoro.musichub.activities.client.home.ClientHomeActivity
+import com.rocatoro.musichub.databinding.ActivityRegisterBinding
 import com.rocatoro.musichub.models.ResponseHttp
 import com.rocatoro.musichub.models.User
 import com.rocatoro.musichub.providers.UsersProvider
 import com.rocatoro.musichub.utils.SharedPref
-import kotlinx.android.synthetic.main.activity_register.*
+//import kotlinx.android.synthetic.main.activity_register.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class RegisterActivity : BaseActivity() {
 
+    private lateinit var binding: ActivityRegisterBinding
+
     val TAG = "RegisterActivity"
     var usersProvider = UsersProvider()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register)
+
+        binding = ActivityRegisterBinding.inflate(layoutInflater)
+
+        //setContentView(R.layout.activity_register)
+
+        setContentView(binding.root)
+
         @Suppress("DEPRECATION")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.hide(WindowInsets.Type.statusBars())
@@ -41,28 +50,28 @@ class RegisterActivity : BaseActivity() {
 
         setupActionBar()
 
-        tv_login.setOnClickListener {
+        binding.tvLogin.setOnClickListener {
             //val intent = Intent(this@RegisterActivity,LoginActivity::class.java)
             //startActivity(intent)
             //finish()
             onBackPressed()
         }
 
-        btn_register.setOnClickListener{
+        binding.btnRegister.setOnClickListener{
             registerUser()
         }
 
     }
 
     private fun setupActionBar(){
-        setSupportActionBar(toolbar_register_activity)
+        setSupportActionBar(binding.toolbarRegisterActivity)
 
         val actionBar = supportActionBar
         if(actionBar != null){
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setHomeAsUpIndicator(R.drawable.ic_black_color_back_24)
         }
-        toolbar_register_activity.setNavigationOnClickListener { onBackPressed() }
+        binding.toolbarRegisterActivity.setNavigationOnClickListener { onBackPressed() }
     }
 
     private fun saveUserInSession(data: String){
@@ -75,31 +84,31 @@ class RegisterActivity : BaseActivity() {
     // A function to validate the entries of new user.
     private fun validateRegisterDetails(): Boolean{
         return when {
-            TextUtils.isEmpty(et_first_name.text.toString().trim{it <= ' '}) -> {
+            TextUtils.isEmpty(binding.etFirstName.text.toString().trim{it <= ' '}) -> {
                 showErrorSnackBar(resources.getString(R.string.err_msg_enter_first_name),true)
                 false
             }
-            TextUtils.isEmpty(et_last_name.text.toString().trim{it <= ' '}) -> {
+            TextUtils.isEmpty(binding.etLastName.text.toString().trim{it <= ' '}) -> {
                 showErrorSnackBar(resources.getString(R.string.err_msg_enter_last_name),true)
                 false
             }
-            TextUtils.isEmpty(et_email.text.toString().trim{it <= ' '}) -> {
+            TextUtils.isEmpty(binding.etEmail.text.toString().trim{it <= ' '}) -> {
                 showErrorSnackBar(resources.getString(R.string.err_msg_enter_email),true)
                 false
             }
-            TextUtils.isEmpty(et_phone.text.toString().trim{it <= ' '}) -> {
+            TextUtils.isEmpty(binding.etPhone.text.toString().trim{it <= ' '}) -> {
                 showErrorSnackBar(resources.getString(R.string.err_msg_enter_phone),true)
                 false
             }
-            TextUtils.isEmpty(et_password.text.toString().trim{it <= ' '}) -> {
+            TextUtils.isEmpty(binding.etPassword.text.toString().trim{it <= ' '}) -> {
                 showErrorSnackBar(resources.getString(R.string.err_msg_enter_password),true)
                 false
             }
-            TextUtils.isEmpty(et_confirm_password.text.toString().trim{it <= ' '}) -> {
+            TextUtils.isEmpty(binding.etConfirmPassword.text.toString().trim{it <= ' '}) -> {
                 showErrorSnackBar(resources.getString(R.string.err_msg_enter_confirm_password),true)
                 false
             }
-            et_password.text.toString().trim{it <= ' '} != et_confirm_password.text.toString()
+            binding.etPassword.text.toString().trim{it <= ' '} != binding.etConfirmPassword.text.toString()
                 .trim{it <= ' '} -> {
                 showErrorSnackBar(resources.getString(R.string.err_msg_password_and_confirm_password_mismatch),true)
                 false
@@ -121,11 +130,11 @@ class RegisterActivity : BaseActivity() {
         // Check with validate function if the entries are valid or not
         if(validateRegisterDetails()){
             showProgressDialog(resources.getString(R.string.please_wait))
-            val name: String = et_first_name.text.toString().trim{it <= ' '}
-            val last_name: String = et_last_name.text.toString().trim {it <= ' '}
-            val email: String = et_email.text.toString().trim{it <= ' '}
-            val phone: String = et_phone.text.toString().trim{it <= ' '}
-            val password: String = et_password.text.toString().trim{it <= ' '}
+            val name: String = binding.etFirstName.text.toString().trim{it <= ' '}
+            val last_name: String = binding.etLastName.text.toString().trim {it <= ' '}
+            val email: String = binding.etEmail.text.toString().trim{it <= ' '}
+            val phone: String = binding.etPhone.text.toString().trim{it <= ' '}
+            val password: String = binding.etPassword.text.toString().trim{it <= ' '}
             // Create an instance and create register a user with email and password
             val user = User(
                 name = name,

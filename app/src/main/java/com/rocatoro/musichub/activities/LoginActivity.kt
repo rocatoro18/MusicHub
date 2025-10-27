@@ -17,23 +17,32 @@ import com.rocatoro.musichub.R
 import com.rocatoro.musichub.activities.MusicHubStore.home.MusicHubHomeActivity
 import com.rocatoro.musichub.activities.client.home.ClientHomeActivity
 import com.rocatoro.musichub.activities.delivery.home.DeliveryHomeActivity
+import com.rocatoro.musichub.databinding.ActivityLoginBinding
 import com.rocatoro.musichub.models.ResponseHttp
 import com.rocatoro.musichub.models.User
 import com.rocatoro.musichub.providers.UsersProvider
 import com.rocatoro.musichub.utils.SharedPref
-import kotlinx.android.synthetic.main.activity_login.*
+//import kotlinx.android.synthetic.main.activity_login.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class LoginActivity : BaseActivity(), View.OnClickListener {
 
+    private lateinit var binding: ActivityLoginBinding
+
     val TAG = "LoginActivity"
     var usersProvider = UsersProvider()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+
+        //setContentView(R.layout.activity_login)
+
+        setContentView(binding.root)
+
         @Suppress("DEPRECATION")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.hide(WindowInsets.Type.statusBars())
@@ -45,11 +54,11 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         }
 
         // Click event assigned to Forgot Password text
-        tv_forgot_password.setOnClickListener(this)
+        binding.tvForgotPassword.setOnClickListener(this)
         // Click event assigned to Login button
-        btn_login.setOnClickListener(this)
+        binding.btnLogin.setOnClickListener(this)
         // Click event assigned to Register text
-        tv_register.setOnClickListener(this)
+        binding.tvRegister.setOnClickListener(this)
 
         getUserFromSession()
 
@@ -83,11 +92,11 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
     private fun validateLoginDetails(): Boolean{
         return when {
-            TextUtils.isEmpty(et_email.text.toString().trim{it <= ' '}) -> {
+            TextUtils.isEmpty(binding.etEmail.text.toString().trim{it <= ' '}) -> {
                 showErrorSnackBar(resources.getString(R.string.err_msg_enter_email),true)
                 false
             }
-            TextUtils.isEmpty(et_password.text.toString().trim{it <= ' '}) -> {
+            TextUtils.isEmpty(binding.etPassword.text.toString().trim{it <= ' '}) -> {
                 showErrorSnackBar(resources.getString(R.string.err_msg_enter_password),true)
                 false
             }
@@ -171,8 +180,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
             // Show the progress dialog
             showProgressDialog(resources.getString(R.string.please_wait))
             // Get the text from editText and trim the space
-            val email = et_email.text.toString().trim{ it <= ' '}
-            val password = et_password.text.toString().trim{ it <= ' '}
+            val email = binding.etEmail.text.toString().trim{ it <= ' '}
+            val password = binding.etPassword.text.toString().trim{ it <= ' '}
             // Log-In using Firebase Authentication
             usersProvider.login(email,password)?.enqueue(object: Callback<ResponseHttp>{
                 override fun onResponse(

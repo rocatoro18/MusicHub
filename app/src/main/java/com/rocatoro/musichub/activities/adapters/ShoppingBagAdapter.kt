@@ -21,7 +21,7 @@ import com.rocatoro.musichub.models.Category
 import com.rocatoro.musichub.models.Product
 import com.rocatoro.musichub.models.Rol
 import com.rocatoro.musichub.utils.SharedPref
-import kotlinx.android.synthetic.main.activity_client_products_detail.*
+//import kotlinx.android.synthetic.main.activity_client_products_detail.*
 
 class ShoppingBagAdapter(val context: Activity, val products: ArrayList<Product>): RecyclerView.Adapter<ShoppingBagAdapter.ShoppingBagViewHolder>() {
 

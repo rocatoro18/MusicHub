@@ -6,7 +6,9 @@ import android.os.Bundle
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.rocatoro.musichub.R
-import kotlinx.android.synthetic.main.dialog_progress.*
+import com.rocatoro.musichub.databinding.DialogProgressBinding
+
+// kotlinx.android.synthetic.main.dialog_progress.*
 
 open class BaseActivity : AppCompatActivity() {
 
@@ -41,8 +43,12 @@ open class BaseActivity : AppCompatActivity() {
         *   Set the screen content from a layout resources
         *   The source will be inflated, adding all top-level views to the screen
         * */
-        mProgressDialog.setContentView(R.layout.dialog_progress)
-        mProgressDialog.tv_progress_text.text = text
+        val binding = DialogProgressBinding.inflate(layoutInflater)
+
+        //mProgressDialog.setContentView(R.layout.dialog_progress)
+        mProgressDialog.setContentView(binding.root)
+        binding.tvProgressText.text = text
+        //mProgressDialog.tv_progress_text.text = text
         mProgressDialog.setCancelable(false)
         mProgressDialog.setCanceledOnTouchOutside(false)
 

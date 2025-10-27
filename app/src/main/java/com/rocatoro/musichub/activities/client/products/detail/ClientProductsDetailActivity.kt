@@ -17,29 +17,32 @@ import com.denzcoskun.imageslider.models.SlideModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.rocatoro.musichub.R
+import com.rocatoro.musichub.databinding.ActivityClientProductsDetailBinding
 import com.rocatoro.musichub.models.Product
 import com.rocatoro.musichub.models.ProductToTransport
 import com.rocatoro.musichub.utils.SharedPref
-import kotlinx.android.synthetic.main.activity_client_products_detail.*
+//import kotlinx.android.synthetic.main.activity_client_products_detail.*
 import org.w3c.dom.Text
 
 class ClientProductsDetailActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityClientProductsDetailBinding
+
     val TAG = "ProductsDetail"
-    var toolbar: Toolbar? = null
+    //var toolbar: Toolbar? = null
 
     var product: Product? = null
-    var productqToTransport: ProductToTransport? = null
+    //var productqToTransport: ProductToTransport? = null
     val gson = Gson()
 
-    var imageSlider: ImageSlider? = null
-    var textViewName: TextView? = null
-    var textViewDescription: TextView? = null
-    var textViewPrice: TextView? = null
-    var textViewCounter: TextView? = null
-    var imageViewAdd: ImageView? = null
-    var imageViewRemove: ImageView? = null
-    var buttonAdd: Button? = null
+    //var imageSlider: ImageSlider? = null
+    //var textViewName: TextView? = null
+    //var textViewDescription: TextView? = null
+    //var textViewPrice: TextView? = null
+    //var textViewCounter: TextView? = null
+    //var imageViewAdd: ImageView? = null
+    //var imageViewRemove: ImageView? = null
+    //var buttonAdd: Button? = null
 
     var counter = 1
     var productPrice = 0.00
@@ -50,45 +53,76 @@ class ClientProductsDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_client_products_detail)
-        toolbar = findViewById(R.id.toolbar)
-        toolbar?.title = "Detalles Producto"
-        toolbar?.setTitleTextColor(ContextCompat.getColor(this,R.color.white))
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding = ActivityClientProductsDetailBinding.inflate(layoutInflater)
+        //setContentView(R.layout.activity_client_products_detail)
+        setContentView(binding.root)
+        //toolbar = findViewById(R.id.toolbar)
+        //toolbar?.title = "Detalles Producto"
+        //toolbar?.setTitleTextColor(ContextCompat.getColor(this,R.color.white))
+        //setSupportActionBar(toolbar)
+        //supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        setupToolbar()
 
         product = gson.fromJson(intent.getStringExtra("product"),Product::class.java)
 
         sharedPref = SharedPref(this)
 
-        imageSlider = findViewById(R.id.imageslider)
-        textViewName = findViewById(R.id.textview_name)
-        textViewDescription = findViewById(R.id.textview_description)
-        textViewPrice = findViewById(R.id.textview_price)
-        textViewCounter = findViewById(R.id.textview_counter)
-        imageViewAdd = findViewById(R.id.imageview_add)
-        imageViewRemove = findViewById(R.id.imageview_remove)
-        buttonAdd = findViewById(R.id.btn_add_product)
+        //imageSlider = findViewById(R.id.imageslider)
+        //textViewName = findViewById(R.id.textview_name)
+        //textViewDescription = findViewById(R.id.textview_description)
+        //textViewPrice = findViewById(R.id.textview_price)
+        //textViewCounter = findViewById(R.id.textview_counter)
+        //imageViewAdd = findViewById(R.id.imageview_add)
+        //imageViewRemove = findViewById(R.id.imageview_remove)
+        //buttonAdd = findViewById(R.id.btn_add_product)
 
-        val imageList = ArrayList<SlideModel>()
-        imageList.add(SlideModel(product?.image1,ScaleTypes.CENTER_CROP))
-        imageList.add(SlideModel(product?.image2,ScaleTypes.CENTER_CROP))
-        imageList.add(SlideModel(product?.image3,ScaleTypes.CENTER_CROP))
+        //val imageList = ArrayList<SlideModel>()
+        //imageList.add(SlideModel(product?.image1,ScaleTypes.CENTER_CROP))
+        //imageList.add(SlideModel(product?.image2,ScaleTypes.CENTER_CROP))
+        //imageList.add(SlideModel(product?.image3,ScaleTypes.CENTER_CROP))
 
-        imageSlider?.setImageList(imageList)
-        textViewName?.text = product?.name
-        textViewDescription?.text = product?.description
-        textViewPrice?.text = "${product?.price}$"
+        //imageSlider?.setImageList(imageList)
+        //textViewName?.text = product?.name
+        //textViewDescription?.text = product?.description
+        //textViewPrice?.text = "${product?.price}$"
 
 
-        imageViewAdd?.setOnClickListener { addItem() }
-        imageViewRemove?.setOnClickListener { removeItem() }
+        //imageViewAdd?.setOnClickListener { addItem() }
+        //imageViewRemove?.setOnClickListener { removeItem() }
 
-        buttonAdd?.setOnClickListener { addToBag() }
-
+        //buttonAdd?.setOnClickListener { addToBag() }
+        setupUI()
         getProductsFromSharedPref()
 
     }
+
+    private fun setupToolbar() {
+        val toolbar = binding.includeToolbar.toolbar
+        toolbar.title = "Detalles Producto"
+        toolbar.setTitleTextColor(ContextCompat.getColor(this,R.color.white))
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    private fun setupUI() {
+        val imageList = ArrayList<SlideModel>()
+        product?.let {
+            imageList.add(SlideModel(it.image1, ScaleTypes.CENTER_CROP))
+            imageList.add(SlideModel(it.image2, ScaleTypes.CENTER_CROP))
+            imageList.add(SlideModel(it.image3, ScaleTypes.CENTER_CROP))
+        }
+
+        binding.imageslider.setImageList(imageList)
+        binding.textviewName.text = product?.name
+        binding.textviewDescription.text = product?.description
+        binding.textviewPrice.text = "${product?.price}$"
+
+        binding.imageviewAdd.setOnClickListener { addItem() }
+        binding.imageviewRemove.setOnClickListener { removeItem() }
+        binding.btnAddProduct.setOnClickListener { addToBag() }
+    }
+
 
     private fun addToBag(){
 
@@ -128,14 +162,15 @@ class ClientProductsDetailActivity : AppCompatActivity() {
 
                 //Desde la BD asignamos la cantidad al textview
                     counter = product?.quantity!!
-                    textViewCounter?.text = "$counter"
+                    binding.textviewCounter.text = "$counter"
                     //textViewCounter?.text = "${product?.quantity}"
 
                     productPrice = product?.price!! * product?.quantity!!
-                    textViewPrice?.text = "${productPrice}$"
+                    binding.textviewPrice.text = "${productPrice}$"
 
-                buttonAdd?.setText("EDITAR PRODUCTO")
-                buttonAdd?.backgroundTintList = ColorStateList.valueOf(Color.RED)
+                //buttonAdd?.setText("EDITAR PRODUCTO")
+                binding.btnAddProduct.text = "EDITAR PRODUCTO"
+                binding.btnAddProduct.backgroundTintList = ColorStateList.valueOf(Color.RED)
 
             }
             for(p in selectedProducts){
@@ -163,8 +198,8 @@ class ClientProductsDetailActivity : AppCompatActivity() {
         counter++
         productPrice = product?.price!! * counter
         product?.quantity = counter
-        textview_counter.text = "${product?.quantity}"
-        textViewPrice?.text = "${productPrice}$"
+        binding.textviewCounter.text = "${product?.quantity}"
+        binding.textviewPrice.text = "${productPrice}$"
     }
 
     private fun removeItem(){
@@ -172,8 +207,8 @@ class ClientProductsDetailActivity : AppCompatActivity() {
             counter--
             productPrice = product?.price!! * counter
             product?.quantity = counter
-            textview_counter.text = "${product?.quantity}"
-            textViewPrice?.text = "${productPrice}$"
+            binding.textviewCounter.text = "${product?.quantity}"
+            binding.textviewPrice.text = "${productPrice}$"
         }
     }
 
